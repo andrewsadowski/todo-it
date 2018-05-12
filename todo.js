@@ -52,15 +52,17 @@ renderTodos(todos, filters);
 
 const body = document.querySelector('body');
 
-document.querySelector('button').addEventListener('click', () => {
-  console.log('Add a new todos');
-});
-
-document.querySelector('#create-todo-button').addEventListener('click', () => {
-  console.log('remove todos');
-});
-
 document.querySelector('#search-text').addEventListener('input', e => {
   filters.searchText = e.target.value;
   renderTodos(todos, filters);
+});
+
+document.querySelector('#todo-text').addEventListener('submit', e => {
+  e.preventDefault();
+  todos.push({
+    text: e.target.elements.todoText.value,
+    completed: false
+  });
+  renderTodos(todos, filters);
+  e.target.elements.todoText.value = '';
 });
