@@ -22,13 +22,19 @@ const todos = [
 ];
 
 const filters = {
-  searchText: ''
+  searchText: '',
+  hideCompleted: false
 };
 
 const renderTodos = (todos, filters) => {
-  const filteredTodos = todos.filter(todo => {
+  let filteredTodos = todos.filter(todo => {
     return todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
   });
+
+  filteredTodos = filteredTodos.filter(todo => {
+    return !filters.hideCompleted || !todo.completed;
+  });
+
   console.log(filteredTodos);
 
   let todosRemaining = filteredTodos.filter(todo => {
@@ -65,4 +71,10 @@ document.querySelector('#todo-text').addEventListener('submit', e => {
   });
   renderTodos(todos, filters);
   e.target.elements.todoText.value = '';
+});
+
+document.querySelector('#hide-completed').addEventListener('change', e => {
+  console.log(e);
+  filters.hideCompleted = e.target.checked;
+  renderTodos(todos, filters);
 });
