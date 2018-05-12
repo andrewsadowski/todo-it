@@ -27,12 +27,10 @@ const filters = {
 };
 
 const renderTodos = (todos, filters) => {
-  let filteredTodos = todos.filter(todo => {
-    return todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
-  });
-
-  filteredTodos = filteredTodos.filter(todo => {
-    return !filters.hideCompleted || !todo.completed;
+  const filteredTodos = todos.filter(todo => {
+    const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
+    const hideCompletedMatch = !filters.hideCompleted || !todo.completed;
+    return searchTextMatch && hideCompletedMatch;
   });
 
   console.log(filteredTodos);
