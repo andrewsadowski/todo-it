@@ -16,14 +16,15 @@ const renderTodos = (todos, filters) => {
   const filteredTodos = todos.filter(todo => {
     const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
     const hideCompletedMatch = !filters.hideCompleted || !todo.completed;
+
     return searchTextMatch && hideCompletedMatch;
   });
 
   let todosRemaining = filteredTodos.filter(todo => {
     return todo.completed === false;
   });
-  document.querySelector('#todo').innerHTML = '';
 
+  document.querySelector('#todo').innerHTML = '';
   document.querySelector('#todo').appendChild(generateSummaryDOM(todosRemaining));
 
   filteredTodos.forEach(todo => {
@@ -32,8 +33,19 @@ const renderTodos = (todos, filters) => {
 };
 
 const generateTodoDOM = todo => {
-  const todoElement = document.createElement('p');
-  todoElement.textContent = todo.text;
+  const todoElement = document.createElement('div');
+  const textElement = document.createElement('span');
+  const checkbox = document.createElement('input');
+  const removeButton = document.createElement('button');
+
+  checkbox.setAttribute('type', 'checkbox');
+  removeButton.textContent = 'Remove Todo';
+
+  todoElement.appendChild(checkbox);
+  textElement.textContent = todo.text;
+  todoElement.appendChild(textElement);
+  todoElement.appendChild(removeButton);
+
   return todoElement;
 };
 
