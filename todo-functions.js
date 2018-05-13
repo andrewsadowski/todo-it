@@ -12,6 +12,15 @@ const saveTodos = todos => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
+const removeTodo = id => {
+  const todoIndex = todos.findIndex(todo => {
+    return todo.id === id;
+  });
+  if (todoIndex > 1) {
+    todos.splice(todoIndex, 1);
+  }
+};
+
 const renderTodos = (todos, filters) => {
   const filteredTodos = todos.filter(todo => {
     const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
@@ -45,6 +54,12 @@ const generateTodoDOM = todo => {
   textElement.textContent = todo.text;
   todoElement.appendChild(textElement);
   todoElement.appendChild(removeButton);
+
+  removeButton.addEventListener('click', () => {
+    removeTodo(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters);
+  });
 
   return todoElement;
 };
