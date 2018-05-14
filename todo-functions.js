@@ -21,6 +21,15 @@ const removeTodo = id => {
   }
 };
 
+const toggleTodo = id => {
+  const todo = todos.find(todo => {
+    return todo.id === id;
+  });
+  if (todo !== undefined) {
+    todo.completed = !todo.completed;
+  }
+};
+
 const renderTodos = (todos, filters) => {
   const filteredTodos = todos.filter(todo => {
     const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
@@ -48,10 +57,16 @@ const generateTodoDOM = todo => {
   const removeButton = document.createElement('button');
 
   checkbox.setAttribute('type', 'checkbox');
-  removeButton.textContent = 'Remove Todo';
+  checkbox.checked = todo.completed;
+  checkbox.addEventListener('change', () => {
+    toggleTodo(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters);
+  });
 
-  todoElement.appendChild(checkbox);
+  removeButton.textContent = 'Remove Todo';
   textElement.textContent = todo.text;
+  todoElement.appendChild(checkbox);
   todoElement.appendChild(textElement);
   todoElement.appendChild(removeButton);
 
