@@ -49,7 +49,7 @@ const renderTodos = (todos, filters) => {
     document.querySelector('#todo').appendChild(generateTodoDOM(todo));
   });
 };
-
+//Generates the dynamic DOM elements
 const generateTodoDOM = todo => {
   const todoElement = document.createElement('div');
   const textElement = document.createElement('span');
