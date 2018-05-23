@@ -8,6 +8,7 @@ const getSavedTodos = () => {
   }
 };
 
+//Saves todos JSON to localstorage
 const saveTodos = todos => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
