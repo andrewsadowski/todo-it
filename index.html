@@ -18,18 +18,24 @@
     </div>
   </div>
 
-  <input type="text" id="search-text" placeholder="Filter Todos...">
+  <div class="actions">
+    <div class="actions__container">
+      <input type="text" class="input" id="search-text" placeholder="Filter Todos...">
+      <label class="checkbox">
+        <input id="hide-completed" type="checkbox"> Hide Completed
+      </label>
+    </div>
+  </div>
 
-  <label>
-    <input id="hide-completed" type="checkbox"> Hide Completed
-  </label>
+  <div class="container">
+    <div id="todo"></div>
+    <form id="todo-text">
+      <input type="text" class="input" name="todoText" placeholder="Enter Todo Text">
+      <button class="button">Add Todo</button>
+    </form>
+  </div>
 
-  <div id="todo"></div>
 
-  <form id="todo-text">
-    <input type="text" name="todoText" placeholder="Enter Todo Text">
-    <button>Add Todo</button>
-  </form>
 
   <script src="/scripts/uuidv4.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment-with-locales.min.js"></script>

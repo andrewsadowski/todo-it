@@ -3,7 +3,7 @@
 const getSavedTodos = () => {
   const todosJSON = localStorage.getItem('todos');
   try {
-    todosJSON ? JSON.parse(todosJSON) : [];
+    return todosJSON ? JSON.parse(todosJSON) : [];
   } catch (e) {
     return [];
   }
@@ -18,7 +18,7 @@ const removeTodo = id => {
   const todoIndex = todos.findIndex(todo => {
     return todo.id === id;
   });
-  if (todoIndex > 1) {
+  if (todoIndex > -1) {
     todos.splice(todoIndex, 1);
   }
 };
@@ -33,6 +33,7 @@ const toggleTodo = id => {
 };
 
 const renderTodos = (todos, filters) => {
+  const todoElement = document.querySelector('#todo');
   const filteredTodos = todos.filter(todo => {
     const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
     const hideCompletedMatch = !filters.hideCompleted || !todo.completed;
@@ -44,34 +45,48 @@ const renderTodos = (todos, filters) => {
     return todo.completed === false;
   });
 
-  document.querySelector('#todo').innerHTML = '';
-  document.querySelector('#todo').appendChild(generateSummaryDOM(todosRemaining));
+  todoElement.innerHTML = '';
+  todoElement.appendChild(generateSummaryDOM(todosRemaining));
 
-  filteredTodos.forEach(todo => {
-    document.querySelector('#todo').appendChild(generateTodoDOM(todo));
-  });
+  if (filteredTodos.length > 0) {
+    filteredTodos.forEach(todo => {
+      todoElement.appendChild(generateTodoDOM(todo));
+    });
+  } else {
+    const messageElement = document.createElement('p');
+    messageElement.classList.add('empty-message');
+    messageElement.textContent = 'No to-dos to show';
+    todoElement.appendChild(messageElement);
+  }
 };
 //Generates the dynamic DOM elements
 const generateTodoDOM = todo => {
-  const todoElement = document.createElement('div');
+  const todoElement = document.createElement('label');
+  const containerElement = document.createElement('div');
   const textElement = document.createElement('span');
   const checkbox = document.createElement('input');
   const removeButton = document.createElement('button');
 
   checkbox.setAttribute('type', 'checkbox');
   checkbox.checked = todo.completed;
+  containerElement.appendChild(checkbox);
   checkbox.addEventListener('change', () => {
     toggleTodo(todo.id);
     saveTodos(todos);
     renderTodos(todos, filters);
   });
 
-  removeButton.textContent = 'Remove Todo';
   textElement.textContent = todo.text;
-  todoElement.appendChild(checkbox);
-  todoElement.appendChild(textElement);
-  todoElement.appendChild(removeButton);
+  containerElement.appendChild(textElement);
 
+  todoElement.classList.add('list-item');
+  containerElement.classList.add('list-item__container');
+  todoElement.appendChild(containerElement);
+
+  removeButton.textContent = 'remove';
+  removeButton.classList.add('button', 'button--text');
+
+  todoElement.appendChild(removeButton);
   removeButton.addEventListener('click', () => {
     removeTodo(todo.id);
     saveTodos(todos);
@@ -83,6 +98,8 @@ const generateTodoDOM = todo => {
 
 const generateSummaryDOM = todosRemaining => {
   const summary = document.createElement('h2');
-  summary.textContent = `You have ${todosRemaining.length} todos left!`;
+  const plural = todosRemaining.length === 1 ? '' : 's';
+  summary.classList.add('list-title');
+  summary.textContent = `You have ${todosRemaining.length} todo${plural} left`;
   return summary;
 };
