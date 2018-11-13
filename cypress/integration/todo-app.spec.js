@@ -8,4 +8,8 @@ describe('Test Todo-It App', () => {
     cy.get('#search-text').type('test1 {enter}');
     cy.get('.list-title').contains('You have 1 todo left');
   });
+  it('should successfully delete a todo', () => {
+    cy.get('.list-item > .button').click();
+    cy.get('.list-title').contains('You have 0 todos left');
+  });
 });
